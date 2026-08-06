@@ -1,0 +1,42 @@
+/**
+ Do not return anything, modify board in-place instead.
+ */
+function solveSudoku(board: string[][]): void {
+    let res = solve(board);
+};
+
+function solve(board : string[][]) : boolean {
+    for(let i = 0;i < 9 ; i++) {
+        for(let j = 0;j < 9 ; j++) {
+            if(board[i][j] == '.') {
+                for(let k = 1 ; k <= 9 ; k++) {
+                    let currVal = k.toString();
+                    if(isValid(board,i,j,currVal)) {
+                        board[i][j] = currVal;
+                        if(solve(board)) return true;
+                        else {
+                            board[i][j] = '.';
+                        }
+                    }
+                }
+                return false;
+            }
+        }
+    }
+    return true;
+}
+
+function isValid(board : string[][],r : number, c : number , currVal : string) {
+    for(let i = 0;i < 9 ; i++) {
+        if(board[r][i] == currVal) return false;
+        if(board[i][c] == currVal) return false;
+        const boxRow = 3 * Math.floor(r / 3);
+        const boxCol = 3 * Math.floor(c / 3);
+
+        if (
+            board[boxRow + Math.floor(i / 3)][boxCol + (i % 3)] === currVal
+        )
+            return false;
+    }
+    return true;
+}
